@@ -1,0 +1,116 @@
+version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - hey
+      - hello
+      - hi
+      - hello there
+      - good morning
+      - good evening
+      - hey there
+      - let's go
+      - hey dude
+      - goodmorning
+      - goodevening
+      - good afternoon
+
+  - intent: show_menu
+    examples: |
+      - show me the menu
+      - what food do you have
+      - what can I order
+      - menu please
+      - what's available
+      - show menu
+      - display menu
+      - food options
+      - what dishes do you have
+      - what do you serve
+      - what's on the menu
+
+  - intent: order_item
+    examples: |
+      - I want combo 1
+      - give me combo 2
+      - combo 3 please
+      - I'll take combo 4
+      - order combo 1
+      - combo 2
+      - combo 3
+      - combo 4
+      - can I get combo 1
+      - I would like combo 2
+      - I'll have combo 3
+
+  - intent: provide_pin
+    examples: |
+      - verify [1111](pin)
+      - verify [2222](pin)
+      - verify [3333](pin)
+      - [4444](pin)
+      - [5555](pin)
+      - [6666](pin)
+
+  - intent: track_order
+    examples: |
+      - track my order
+      - where is my order
+      - check order status
+      - track order
+      - order status
+      - find my order
+      - check my order
+      - what's the status of my order
+      - track order status
+
+  - intent: provide_order_id
+    examples: |
+      - order [OD1234](order_id)
+      - order [OD5678](order_id)
+      - order [OD9012](order_id)
+      - [OD3456](order_id)
+      - [OD7890](order_id)
+      - [OD2468](order_id)
+
+  - intent: order_done
+    examples: |
+      - complete order
+      - finish order
+      - done with order
+      - make payment
+      - pay now
+      - complete payment
+      - finish payment
+      - process my order
+
+  - intent: give_feedback
+    examples: |
+      - give feedback
+      - provide feedback
+      - share feedback
+      - feedback
+      - rate order
+      - rate my order
+      - comment on order
+      - review order
+      - submit feedback
+      - leave feedback
+      - write review
+      - want to give feedback
+
+  - intent: provide_feedback
+    examples: |
+      - The food was great
+      - Delivery was quick
+      - Service could be better
+      - Everything was perfect
+      - Not satisfied with the order
+      - Good experience
+      - Average service
+      - Excellent food quality
+      - Could improve packaging
+      - Very prompt delivery
+      - Food was cold
+      - Outstanding service

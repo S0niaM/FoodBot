@@ -1,0 +1,109 @@
+version: "3.1"
+
+intents:
+  - greet
+  - show_menu
+  - order_item
+  - provide_pin
+  - order_done
+  - track_order
+  - provide_order_id
+  - give_feedback
+  - provide_feedback
+
+entities:
+  - pin
+  - address
+  - order_id
+
+slots:
+  contact_number:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: contact_form
+            requested_slot: contact_number
+  
+  address:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: address_form
+            requested_slot: address
+  
+  tracking_order_id:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: order_id
+    - type: from_text
+      conditions:
+        - active_loop: order_tracking_form
+          requested_slot: tracking_order_id
+
+  feedback_order_id:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: feedback_form
+            requested_slot: feedback_order_id
+  
+  feedback_text:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_text
+        conditions:
+          - active_loop: feedback_form
+            requested_slot: feedback_text
+
+forms:
+  contact_form:
+    required_slots:
+      - contact_number
+  
+  address_form:
+    required_slots:
+      - address
+
+  order_tracking_form:
+    required_slots:
+      - tracking_order_id
+
+  feedback_form:
+    required_slots:
+      - feedback_order_id
+      - feedback_text
+
+responses: {}
+
+actions:
+  - action_greet
+  - action_show_menu
+  - action_order_item
+  - action_ask_contact
+  - action_send_pin
+  - action_validate_pin
+  - action_ask_address
+  - action_save_address
+  - action_order_done
+  - validate_contact_form
+  - validate_address_form
+  - action_ask_order_id_for_tracking
+  - validate_order_tracking_form
+  - action_check_order_status
+  - action_ask_order_id_for_feedback
+  - action_ask_feedback
+  - action_save_feedback
+  - validate_feedback_form
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

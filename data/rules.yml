@@ -1,0 +1,95 @@
+version: "3.1"
+
+rules:
+  - rule: Greet user
+    steps:
+      - intent: greet
+      - action: action_greet
+
+  - rule: Show menu
+    steps:
+      - intent: show_menu
+      - action: action_show_menu
+
+  - rule: Handle order item selection
+    steps:
+      - intent: order_item
+      - action: action_order_item
+      - action: action_ask_contact
+      - action: contact_form
+      - active_loop: contact_form
+
+  - rule: Submit contact form and send pin
+    condition:
+      - active_loop: contact_form
+    steps:
+      - action: contact_form
+      - active_loop: null
+      - slot_was_set:
+          - requested_slot: null
+      - action: action_send_pin
+
+  - rule: Handle PIN validation
+    steps:
+      - intent: provide_pin
+      - action: action_validate_pin
+      - action: action_ask_address
+      - action: address_form
+      - active_loop: address_form
+
+  - rule: Submit address form
+    condition:
+      - active_loop: address_form
+    steps:
+      - action: address_form
+      - active_loop: null
+      - slot_was_set:
+          - requested_slot: null
+      - action: action_save_address
+
+  - rule: Complete order
+    steps:
+      - intent: order_done
+      - action: action_order_done
+
+  - rule: Activate tracking form
+    steps:
+      - intent: track_order
+      - action: action_ask_order_id_for_tracking
+      - action: order_tracking_form
+      - active_loop: order_tracking_form
+
+  - rule: Submit tracking form
+    condition:
+      - active_loop: order_tracking_form
+    steps:
+      - action: order_tracking_form
+      - active_loop: null
+      - slot_was_set:
+          - requested_slot: null
+      - action: action_check_order_status
+
+  - rule: Track order with direct order ID
+    condition:
+      - active_loop: null
+    steps:
+      - intent: provide_order_id
+      - action: order_tracking_form
+      - active_loop: order_tracking_form
+
+  - rule: Activate feedback provide_feedback
+    steps:
+      - intent: give_feedback
+      - action: action_ask_order_id_for_feedback
+      - action: feedback_form
+      - active_loop: feedback_form
+
+  - rule: Submit feedback form
+    condition:
+      - active_loop: feedback_form
+    steps:
+      - action: feedback_form
+      - active_loop: null
+      - slot_was_set:
+          - requested_slot: null
+      - action: action_save_feedback

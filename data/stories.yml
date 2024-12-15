@@ -1,0 +1,54 @@
+version: "3.1"
+
+stories:
+  - story: Complete order flow
+    steps:
+      - intent: greet
+      - action: action_greet
+      - intent: show_menu
+      - action: action_show_menu
+      - intent: order_item
+      - action: action_order_item
+      - action: action_ask_contact
+      - action: contact_form
+      - active_loop: contact_form
+      - active_loop: null
+      - action: action_send_pin
+      - intent: provide_pin
+      - action: action_validate_pin
+      - action: action_ask_address
+      - action: address_form
+      - active_loop: address_form
+      - active_loop: null
+      - action: action_save_address
+      - intent: order_done
+      - action: action_order_done
+
+  - story: Track order flow with form
+    steps:
+      - intent: track_order
+      - action: action_ask_order_id_for_tracking
+      - action: order_tracking_form
+      - active_loop: order_tracking_form
+      - active_loop: null
+      - action: action_check_order_status
+      - action: action_listen
+
+  - story: Track order with direct order ID
+    steps:
+      - intent: provide_order_id
+      - action: order_tracking_form
+      - active_loop: order_tracking_form
+      - active_loop: null
+      - action: action_check_order_status
+      - action: action_listen
+
+  - story: Give feedback flow
+    steps:
+      - intent: give_feedback
+      - action: action_ask_order_id_for_feedback
+      - action: feedback_form
+      - active_loop: feedback_form
+      - active_loop: null
+      - action: action_save_feedback
+      - action: action_listen
