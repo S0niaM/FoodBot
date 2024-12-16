@@ -75,7 +75,8 @@ class ActionGreet(Action):
         buttons = [
             {"payload": "/show_menu", "title": "Show Menu"},
             {"payload": "/track_order", "title": "Track Order"},
-            {"payload": "/give_feedback", "title": "Give Feedback"}
+            {"payload": "/give_feedback", "title": "Give Feedback"},
+            {"payload": "/search_for_cat", "title": "Search for cat"}
         ]
         print(f"Input message: {tracker.latest_message.get('text')}")
         print(f"Sender ID: {tracker.sender_id}")
@@ -349,9 +350,15 @@ class ActionOrderDone(Action):
                     ''', (order_id,))
                     
                     conn.commit()
-                    
+                    buttons = [
+                        {"payload": "/show_menu", "title": "Show Menu"},
+                        {"payload": "/track_order", "title": "Track Order"},
+                        {"payload": "/give_feedback", "title": "Give Feedback"},
+                        {"payload": "/search_for_cat", "title": "Search for cat"}
+                    ]
                     dispatcher.utter_message(
-                        text=f"Your order is confirmed and your order ID is {order_id}. Thank you for ordering!"
+                        text=f"Your order is confirmed and your order ID is {order_id}. Thank you for ordering!",
+                        buttons=buttons
                     )
                 else:
                     dispatcher.utter_message(
@@ -434,7 +441,8 @@ class ActionCheckOrderStatus(Action):
                     buttons = [
                         {"payload": "/show_menu", "title": "Show Menu"},
                         {"payload": "/track_order", "title": "Track Order"},
-                        {"payload": "/give_feedback", "title": "Give Feedback"}
+                        {"payload": "/give_feedback", "title": "Give Feedback"},
+                        {"payload": "/search_for_cat", "title": "Search for cat"}
                     ]
                     
                     dispatcher.utter_message(
@@ -550,7 +558,8 @@ class ActionSaveFeedback(Action):
                 buttons = [
                     {"payload": "/show_menu", "title": "Show Menu"},
                     {"payload": "/track_order", "title": "Track Order"},
-                    {"payload": "/give_feedback", "title": "Give Feedback"}
+                    {"payload": "/give_feedback", "title": "Give Feedback"},
+                    {"payload": "/search_for_cat", "title": "Search for cat"}
                 ]
                 
                 dispatcher.utter_message(
@@ -564,3 +573,50 @@ class ActionSaveFeedback(Action):
         
         # Clear the slots after saving feedback
         return [SlotSet("feedback_order_id", None), SlotSet("feedback_text", None)]
+
+
+class ActionAskForKeyword(Action):
+    def name(self) -> Text:
+        return "action_ask_for_key_word"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        dispatcher.utter_message(text="Please provide a keyword to for cat search")
+        return []
+    
+class ValidateSearchCatForm(FormValidationAction):
+    def name(self) -> Text:
+        return "validate_search_cat_form"
+
+    def validate_search_keyword(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        
+        if len(slot_value.strip()) > 0:
+            return {"search_keyword": slot_value}
+        else:
+            dispatcher.utter_message(text="Please provide some feedback text.")
+            return {"search_keyword": None}
+
+class ActionReturnCatImage(Action):
+    def name(self) -> Text:
+        return "action_return_cat_image"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        search_keyword = tracker.get_slot("search_keyword")
+        response = f"""<div style="text-align: center"><img src="https://cataas.com/cat/{search_keyword}" alt="Cute orange cat" style="max-width: 100%; border-radius: 8px; margin: 10px 0;"></div>"""
+        buttons = [
+            {"payload": "/show_menu", "title": "Show Menu"},
+            {"payload": "/track_order", "title": "Track Order"},
+            {"payload": "/give_feedback", "title": "Give Feedback"},
+            {"payload": "/search_for_cat", "title": "Search for cat"}
+        ]
+        dispatcher.utter_message(text=response,buttons=buttons)
+        return [SlotSet("search_keyword", None)]

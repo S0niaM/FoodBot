@@ -54,6 +54,21 @@
             border-radius: 10px;
         }
 
+        /* Add styles for HTML content within messages */
+        .message img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .message a {
+            color: #075e54;
+            text-decoration: none;
+        }
+
+        .message a:hover {
+            text-decoration: underline;
+        }
+
         .button-list {
             display: flex;
             flex-wrap: wrap;
@@ -117,10 +132,34 @@
         const userInput = document.getElementById('userInput');
         const senderId = 'user_' + Math.random().toString(36).slice(2);
 
-        function addMessage(text, isUser) {
+        function sanitizeHTML(html) {
+            // Create a new div element
+            const temp = document.createElement('div');
+            // Set the HTML content with the given value
+            temp.innerHTML = html;
+            
+            // Remove potentially dangerous elements and attributes
+            const scripts = temp.getElementsByTagName('script');
+            const iframes = temp.getElementsByTagName('iframe');
+            while (scripts[0]) scripts[0].parentNode.removeChild(scripts[0]);
+            while (iframes[0]) iframes[0].parentNode.removeChild(iframes[0]);
+
+            // Get the sanitized version of the HTML
+            return temp.innerHTML;
+        }
+
+        function addMessage(content, isUser) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
-            messageDiv.textContent = text;
+            
+            if (isUser) {
+                // For user messages, keep as plain text
+                messageDiv.textContent = content;
+            } else {
+                // For bot messages, parse as HTML after sanitizing
+                messageDiv.innerHTML = sanitizeHTML(content);
+            }
+            
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }

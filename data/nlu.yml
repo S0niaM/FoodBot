@@ -114,3 +114,21 @@ nlu:
       - Very prompt delivery
       - Food was cold
       - Outstanding service
+
+  - intent: search_for_cat
+    examples:  |
+      - i want to search for a cat
+      - search for a cat
+      - can you search for a cat
+      - how can i search for a cat
+      - Search a cat
+      - can you search a cat
+      - Search a cat
+
+  - intent: provide_search_keyword
+    examples: |
+      - [cute](cat_keyword)
+      - [addorable](cat_keyword)
+      - [good looking](cat_keyword)
+      - [cute , funny](cat_keyword)
+      - [lovely](cat_keyword)

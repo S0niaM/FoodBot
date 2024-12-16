@@ -52,3 +52,20 @@ stories:
       - active_loop: null
       - action: action_save_feedback
       - action: action_listen
+
+  - story: Search a Cat flow
+    steps:
+      - intent: search_for_cat
+      - action: action_ask_for_key_word
+      - action: search_cat_form
+      - active_loop: search_cat_form
+      - active_loop: null
+      - action: action_return_cat_image
+
+  - story: search cat directly
+    steps:
+      - intent: provide_search_keyword
+      - action: search_cat_form
+      - active_loop: search_cat_form
+      - active_loop: null
+      - action: action_return_cat_image

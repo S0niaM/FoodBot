@@ -10,11 +10,14 @@ intents:
   - provide_order_id
   - give_feedback
   - provide_feedback
+  - search_for_cat
+  - provide_search_keyword
 
 entities:
   - pin
   - address
   - order_id
+  - cat_keyword
 
 slots:
   contact_number:
@@ -45,6 +48,17 @@ slots:
       conditions:
         - active_loop: order_tracking_form
           requested_slot: tracking_order_id
+
+  search_keyword:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: cat_keyword
+    - type: from_text
+      conditions:
+        - active_loop: search_cat_form
+          requested_slot: search_keyword
 
   feedback_order_id:
     type: text
@@ -82,6 +96,10 @@ forms:
       - feedback_order_id
       - feedback_text
 
+  search_cat_form:
+    required_slots:
+      - search_keyword
+
 responses: {}
 
 actions:
@@ -103,6 +121,9 @@ actions:
   - action_ask_feedback
   - action_save_feedback
   - validate_feedback_form
+  - action_ask_for_key_word
+  - validate_search_cat_form
+  - action_return_cat_image
 
 session_config:
   session_expiration_time: 60

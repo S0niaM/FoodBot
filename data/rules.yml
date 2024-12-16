@@ -93,3 +93,18 @@ rules:
       - slot_was_set:
           - requested_slot: null
       - action: action_save_feedback
+
+  - rule: Search for a cat
+    steps:
+      - intent: search_for_cat
+      - action: action_ask_for_key_word
+      - action: search_cat_form
+      - active_loop: search_cat_form
+
+  - rule: search cat directly
+    condition:
+      - active_loop: null
+    steps:
+      - intent: provide_search_keyword
+      - action: search_cat_form
+      - active_loop: search_cat_form
